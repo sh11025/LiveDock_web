@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiveDock Web · 실시간 스트리밍 서버 모니터링</title>
+  <meta name="description" content="유튜브, SOOP, 치지직의 실시간 중계 서버 응답 속도와 장애 여부를 실시간으로 모니터링합니다.">
+  
+  <!-- PWA & Mobile Web App Settings -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0d14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LiveDock">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%23121824%22/><text y=%22.9em%22 x=%22.1em%22 font-size=%2280%22>📺</text></svg>">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-glow"></div>
+
+  <div class="app-container">
+    <!-- 초미니멀 상단 헤더 -->
+    <header class="dashboard-header">
+      <div class="brand-area">
+        <h1 class="brand-title">LiveDock</h1>
+        <span id="last-updated-time" class="last-updated-text">측정 중...</span>
+      </div>
+
+      <!-- 종합 상태 인디케이터 배지 -->
+      <div id="overall-status" class="overall-badge healthy">
+        <span class="status-pulse-dot"></span>
+        <span id="overall-status-text" class="status-text">서버 정상</span>
+      </div>
+    </header>
+
+    <!-- 내 기기 인터넷 연결 끊김 안내 배너 -->
+    <div id="offline-banner" class="offline-banner">
+      📡 스마트폰 네트워크(Wi-Fi / 모바일 데이터) 연결이 끊어졌습니다
+    </div>
+
+    <!-- 플랫폼 서버 모니터링 카드 3개 (유튜브 → SOOP → 치지직) -->
+    <main class="platform-grid">
+      <!-- 유튜브 (YOUTUBE) 카드 -->
+      <article id="card-YOUTUBE" class="server-card platform-youtube loading">
+        <div class="card-glow"></div>
+        <header class="card-header">
+          <div class="platform-info">
+            <div class="platform-icon youtube-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M21.58 7.19C21.35 6.33 20.67 5.65 19.81 5.42C18.25 5 12 5 12 5C12 5 5.75 5 4.19 5.42C3.33 5.65 2.65 6.33 2.42 7.19C2 8.75 2 12 2 12C2 12 2 15.25 2.42 16.81C2.65 17.67 3.33 18.35 4.19 18.58C5.75 19 12 19 12 19C12 19 18.25 19 19.81 18.58C20.67 18.35 21.35 17.67 21.58 16.81C22 15.25 22 12 22 12C22 12 22 8.75 21.58 7.19ZM10 15V9L15.2 12L10 15Z" fill="#FF4E4E"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="platform-name">유튜브</h2>
+              <span class="platform-service">GoogleVideo Relay</span>
+            </div>
+          </div>
+          <div class="status-indicator">
+            <span class="indicator-dot"></span>
+            <span class="indicator-text">측정 중...</span>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="metric-row">
+            <div class="metric-block">
+              <span class="metric-label">응답 속도</span>
+              <div class="metric-value-wrap">
+                <span class="latency-val">--</span>
+                <span class="latency-unit">ms</span>
+              </div>
+            </div>
+            <div class="metric-block text-right">
+              <span class="metric-label">HTTP 상태</span>
+              <span class="http-status-code">--</span>
+            </div>
+          </div>
+
+          <!-- 지연시간 게이지 바 -->
+          <div class="gauge-container">
+            <div class="gauge-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <footer class="card-footer">
+          <span class="status-message">서버 연결 확인 중...</span>
+        </footer>
+      </article>
+
+      <!-- SOOP 카드 -->
+      <article id="card-SOOP" class="server-card platform-soop loading">
+        <div class="card-glow"></div>
+        <header class="card-header">
+          <div class="platform-info">
+            <div class="platform-icon soop-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 16.5V7.5L16 12L10 16.5Z" fill="#0084FF"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="platform-name">SOOP</h2>
+              <span class="platform-service">Player Live API</span>
+            </div>
+          </div>
+          <div class="status-indicator">
+            <span class="indicator-dot"></span>
+            <span class="indicator-text">측정 중...</span>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="metric-row">
+            <div class="metric-block">
+              <span class="metric-label">응답 속도</span>
+              <div class="metric-value-wrap">
+                <span class="latency-val">--</span>
+                <span class="latency-unit">ms</span>
+              </div>
+            </div>
+            <div class="metric-block text-right">
+              <span class="metric-label">HTTP 상태</span>
+              <span class="http-status-code">--</span>
+            </div>
+          </div>
+
+          <!-- 지연시간 게이지 바 -->
+          <div class="gauge-container">
+            <div class="gauge-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <footer class="card-footer">
+          <span class="status-message">서버 연결 확인 중...</span>
+        </footer>
+      </article>
+
+      <!-- 치지직 (CHZZK) 카드 -->
+      <article id="card-CHZZK" class="server-card platform-chzzk loading">
+        <div class="card-glow"></div>
+        <header class="card-header">
+          <div class="platform-info">
+            <div class="platform-icon chzzk-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect width="22" height="22" rx="5" fill="#00FFA3" fill-opacity="0.2"/>
+                <path d="M11 4L4 9.5V18H8.5V13H13.5V18H18V9.5L11 4Z" fill="#00FFA3"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="platform-name">치지직</h2>
+              <span class="platform-service">CHZZK Session API</span>
+            </div>
+          </div>
+          <div class="status-indicator">
+            <span class="indicator-dot"></span>
+            <span class="indicator-text">측정 중...</span>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="metric-row">
+            <div class="metric-block">
+              <span class="metric-label">응답 속도</span>
+              <div class="metric-value-wrap">
+                <span class="latency-val">--</span>
+                <span class="latency-unit">ms</span>
+              </div>
+            </div>
+            <div class="metric-block text-right">
+              <span class="metric-label">HTTP 상태</span>
+              <span class="http-status-code">--</span>
+            </div>
+          </div>
+
+          <!-- 지연시간 게이지 바 -->
+          <div class="gauge-container">
+            <div class="gauge-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <footer class="card-footer">
+          <span class="status-message">서버 연결 확인 중...</span>
+        </footer>
+      </article>
+    </main>
+  </div>
+
+  <!-- Javascript -->
+  <script src="app.js"></script>
+</body>
+</html>

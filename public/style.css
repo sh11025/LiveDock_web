@@ -1,0 +1,465 @@
+/* ==========================================================================
+   LiveDock Web · 실시간 스트리밍 서버 모니터링 (초미니멀 전용)
+   스마트폰 모니터링에 최적화된 컴팩트 & 다크/OLED 테마
+   ========================================================================== */
+
+:root {
+  --bg-primary: #0a0d14;
+  --bg-secondary: #121824;
+  --bg-card: rgba(18, 24, 38, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.08);
+
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  --chzzk-color: #00ffa3;
+  --soop-color: #0084ff;
+  --youtube-color: #ff4e4e;
+
+  --status-healthy: #10b981;
+  --status-warning: #f59e0b;
+  --status-error: #ef4444;
+
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 배경 미세 글로우 */
+.background-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 10%, rgba(255, 78, 78, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 90% 20%, rgba(0, 132, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(0, 255, 163, 0.06) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 전체 컨테이너 */
+.app-container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* ==========================================================================
+   상단 헤더 (미니멀)
+   ========================================================================== */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.brand-area {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.last-updated-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* 종합 상태 배지 */
+.overall-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--border-glass);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.overall-badge.healthy {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--status-healthy);
+}
+
+.overall-badge.warning {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--status-warning);
+}
+
+.overall-badge.error {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--status-error);
+}
+
+.status-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: pulse-ring 1.8s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 currentColor; }
+  70% { box-shadow: 0 0 0 5px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ==========================================================================
+   플랫폼 서버 카드 그리드
+   ========================================================================== */
+.platform-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.server-card {
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+/* 플랫폼별 상단 컬러 라인 */
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  opacity: 0.8;
+}
+
+.platform-youtube .card-glow { background: var(--youtube-color); box-shadow: 0 0 10px var(--youtube-color); }
+.platform-soop .card-glow { background: var(--soop-color); box-shadow: 0 0 10px var(--soop-color); }
+.platform-chzzk .card-glow { background: var(--chzzk-color); box-shadow: 0 0 10px var(--chzzk-color); }
+
+/* 카드 헤더 */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.platform-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.platform-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+}
+
+.platform-name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.platform-service {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+/* 상태 인디케이터 */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+}
+
+.indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.server-card.healthy .status-indicator { color: var(--status-healthy); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.25); }
+.server-card.healthy .indicator-dot { background: var(--status-healthy); box-shadow: 0 0 6px var(--status-healthy); }
+
+.server-card.warning .status-indicator { color: var(--status-warning); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.25); }
+.server-card.warning .indicator-dot { background: var(--status-warning); box-shadow: 0 0 6px var(--status-warning); }
+
+.server-card.error .status-indicator { color: var(--status-error); background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.25); }
+.server-card.error .indicator-dot { background: var(--status-error); box-shadow: 0 0 6px var(--status-error); }
+
+/* 카드 바디 */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.metric-label {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.metric-value-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.latency-val {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.latency-unit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.text-right {
+  text-align: right;
+}
+
+.http-status-code {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* 게이지 바 */
+.gauge-container {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.gauge-bar {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--status-healthy);
+  transition: width 0.4s ease-out, background-color 0.3s ease;
+}
+
+/* 카드 푸터 */
+.card-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-message {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   내 기기 네트워크 오프라인 알림 배너
+   ========================================================================== */
+.offline-banner {
+  display: none;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  animation: pulse-offline 2s infinite ease-in-out;
+}
+
+@keyframes pulse-offline {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.6; }
+}
+
+body.is-offline .offline-banner {
+  display: block;
+}
+
+body.is-offline .server-card {
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   스마트폰 세로 초간결 모드 (세로 화면)
+   ========================================================================== */
+@media (max-width: 480px) {
+  .app-container {
+    padding: 0.85rem 0.75rem;
+    gap: 0.65rem;
+  }
+
+  .server-card {
+    padding: 0.75rem 0.95rem;
+    gap: 0.5rem;
+  }
+
+  .latency-val {
+    font-size: 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   스마트폰 가로 거치대 전용 레이아웃 (Landscape 모드)
+   가로로 눕혔을 때 좌/중/우 3열로 꽉 차게 표시
+   ========================================================================== */
+@media (orientation: landscape) and (max-height: 520px) {
+  .app-container {
+    max-width: 100%;
+    padding: 0.45rem 0.75rem;
+    gap: 0.35rem;
+    height: 100vh;
+    justify-content: space-between;
+  }
+
+  .dashboard-header {
+    padding-bottom: 0.25rem;
+  }
+
+  .brand-title {
+    font-size: 1.05rem;
+  }
+
+  .last-updated-text {
+    font-size: 0.6875rem;
+  }
+
+  .overall-badge {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.6875rem;
+  }
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .server-card {
+    padding: 0.55rem 0.75rem;
+    gap: 0.35rem;
+    justify-content: space-between;
+    border-radius: 10px;
+  }
+
+  .platform-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .platform-name {
+    font-size: 0.95rem;
+  }
+
+  .platform-service {
+    display: none; /* 가로 거치 시 공간 확보를 위해 서브 텍스트 숨김 */
+  }
+
+  .status-indicator {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.6875rem;
+  }
+
+  .latency-val {
+    font-size: 1.35rem;
+  }
+
+  .http-status-code {
+    font-size: 0.8125rem;
+  }
+
+  .gauge-container {
+    height: 3px;
+  }
+
+  .card-footer {
+    padding-top: 0.2rem;
+  }
+
+  .status-message {
+    font-size: 0.6875rem;
+  }
+}

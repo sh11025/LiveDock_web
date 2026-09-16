@@ -1,0 +1,21 @@
+{
+  "name": "livedock-web",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "치지직 · SOOP · 유튜브 실시간 스트리밍 서버 상태 모니터링 웹 대시보드",
+  "main": "api/health.js",
+  "scripts": {
+    "start": "node local_dev.js",
+    "dev": "node local_dev.js"
+  },
+  "keywords": [
+    "chzzk",
+    "soop",
+    "youtube",
+    "healthcheck",
+    "monitoring",
+    "livedock"
+  ],
+  "author": "",
+  "license": "MIT"
+}
