@@ -9,17 +9,24 @@
 
 ---
 
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-22c55e?style=flat-square&logo=github)](https://sh11025.github.io/LiveDock_web/public/index.html)
 [![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel)](https://vercel.com)
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 [![JavaScript](https://img.shields.io/badge/ES6+-Vanilla%20JS-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/CHZZK%20%7C%20SOOP%20%7C%20YouTube-Supported-00FFA3?style=flat-square)](#-모니터링-대상-플랫폼)
 
-[라이브 데모 둘러보기](#-빠른-시작-quick-start) • [주요 기능](#-핵심-기능) • [시스템 구조도](#-시스템-아키텍처) • [동작 워크플로우](#-동작-워크플로우)
+[🚀 라이브 데모 바로가기](https://sh11025.github.io/LiveDock_web/public/index.html) • [주요 기능](#-핵심-기능) • [시스템 구조도](#-시스템-아키텍처) • [동작 워크플로우](#-동작-워크플로우)
 
 </div>
 
 <br>
+
+> 🔗 **실시간 웹 서비스 (Live Demo)**:  
+> [https://sh11025.github.io/LiveDock_web/public/index.html](https://sh11025.github.io/LiveDock_web/public/index.html)  
+> *(별도 설치 없이 PC/스마트폰 브라우저에서 즉시 실시간 모니터링이 가능합니다)*
+
+---
 
 ## 💡 프로젝트 소개
 
@@ -217,6 +224,8 @@ vercel
 
 ### GitHub Pages 배포
 정적 파일(`public/`)만으로도 브라우저 직접 핑 모드를 통해 완벽하게 작동하므로 GitHub Pages 정적 호스팅으로도 즉시 서비스가 가능합니다.
+- **배포 주소**: [https://sh11025.github.io/LiveDock_web/public/index.html](https://sh11025.github.io/LiveDock_web/public/index.html)
+
 
 ---
 
